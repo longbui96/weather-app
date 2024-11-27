@@ -35,7 +35,7 @@ function MainLayout() {
       const response: IWeather[] | undefined = await getWeatherData();
       setData(response);
     } catch (err) {
-      console.log(err);
+      console.log("Error", err);
     }
   };
 
