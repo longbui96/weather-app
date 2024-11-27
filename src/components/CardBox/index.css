@@ -1,0 +1,6 @@
+.CardBox {
+    width: fit-content;
+    border-radius: 4px;
+    background-color: aliceblue;
+    padding: 30px 60px;
+}
