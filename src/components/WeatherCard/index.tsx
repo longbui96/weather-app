@@ -1,7 +1,11 @@
 import { HTMLAttributes } from "react";
-import "./index.css";
+
 import { formatTime } from "../../utils";
 import { ReactComponent as IconXMarkCircle } from "../../assets/icons/iconmonstr-x-mark-circle-thin.svg";
+
+import Button from "../Button";
+
+import "./index.css";
 
 /*
   // Example data
@@ -56,16 +60,23 @@ export interface IWeather {
   forecast: IForecast[];
 }
 
+export interface IExtraProps {
+  data: IWeather,
+  onClose?: () => {}
+}
+
 const WeatherCard = ({
   data,
+  onClose,
+  className,
   ...props
-}: Partial<HTMLAttributes<HTMLDivElement>> & { data: IWeather }) => {
+}: Partial<HTMLAttributes<HTMLDivElement>> & IExtraProps) => {
   // const latestForecast = data.forecast.sort((a, b) => {
   //   return new Date(b.date).getTime() - new Date(a.date).getTime();
   // })[0];
 
   return (
-    <div className="WeatherCard" {...props}>
+    <div className={`WeatherCard ${className}`} {...props}>
       <div className="WeatherCard-City">
         <span>
           {data.city}, {data.temperature}°C
@@ -80,9 +91,9 @@ const WeatherCard = ({
           </div>
         </div>
       </div>
-      <div className="WeatherCard-Closer noselect">
-        <IconXMarkCircle />
-      </div>
+      <Button className="WeatherCard-Closer noselect" onClick={onClose} icon={<IconXMarkCircle />}>
+        
+      </Button>
     </div>
   );
 };

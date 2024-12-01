@@ -1,8 +1,17 @@
-import { HTMLAttributes } from "react";
+import { HTMLAttributes, ReactElement } from "react";
 import "./index.css";
 
-const Button = (props: Partial<HTMLAttributes<HTMLButtonElement>>) => {
-  return <button className="Button" {...props}></button>;
+interface IExtraProps {
+  icon: ReactElement
+}
+
+const Button = (props: Partial<HTMLAttributes<HTMLButtonElement> & IExtraProps> ) => {
+  const {icon, children, className, ...restProps} = props;
+  
+  return <button className={`${className} Button`} {...restProps}>
+    {icon}
+    {children}
+  </button>;
 };
 
 export default Button;

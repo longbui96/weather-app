@@ -1,10 +1,13 @@
-import "./index.css";
-import CardBox from "../../components/CardBox";
-import Input from "../../components/Input";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
 import { getWeatherData } from "../../modules/weathers";
+
+import CardBox from "../../components/CardBox";
+import SearchBox from "../../components/SearchBox";
 import WeatherCard, { IWeather } from "../../components/WeatherCard";
-import Button from "../../components/Button";
+
+import "./index.css";
+import Loading from "../../components/Loading";
 
 /*
   1. Tech Stack:
@@ -24,29 +27,41 @@ import Button from "../../components/Button";
 */
 
 function MainLayout() {
-  const [data, setData] = useState<IWeather[] | undefined>([]);
+  const [data, setData] = useState<IWeather[]>([]);
+  const [isLoading, setLoading] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   useEffect(() => {
     getWeather();
   }, []);
 
   const getWeather = async () => {
+    if (isLoading) return; // Prevent multiple requests while loading
+
     try {
-      const response: IWeather[] | undefined = await getWeatherData();
-      setData(response);
-    } catch (err) {
-      console.log("Error", err);
+      setLoading(true);
+      const newData: IWeather[] = await getWeatherData({page: currentPage, pageSize: 2})
+
+      setData(prev => [...prev, ...newData]);
+      setLoading(false);
+      setCurrentPage(prev => prev + 1)
+    }
+    catch (error) {
+      console.log("Error when get weather data: ", error)
+      // alert("Having a issue when get weather data, please try again!")
     }
   };
 
   return (
     <div className="MainLayout">
       <CardBox>
-        <Input />
-        <Button>Search</Button>
-        {data?.map((each) => (
-          <WeatherCard data={each}></WeatherCard>
-        ))}
+        <SearchBox />
+        <div className="Scroller">
+          {data?.map((each) => (
+            <WeatherCard className={"mb-2"} data={each}></WeatherCard>
+          ))}
+        </div>
+        <Loading isLoading={isLoading}/>
       </CardBox>
     </div>
   );
