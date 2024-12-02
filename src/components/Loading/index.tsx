@@ -1,9 +1,21 @@
-import LoadingGif from "../../assets/loading.gif"
+import LoadingGif from "../../assets/loading.gif";
+import "./index.css";
 
-import "./index.css"
+const Loading = ({
+  isLoading = false,
+  className = "",
+  style = {},
+  ...props
+}) => {
+  return isLoading ? (
+    <img
+      className={`Loading ${className}`}
+      src={LoadingGif}
+      alt="Loading..."
+      style={style}
+      {...props}
+    />
+  ) : null;
+};
 
-const Loading = ({isLoading = false}) => {
-  return isLoading ? <img className={"Loading"} src={LoadingGif} alt="Loading..."></img> : <></>
-}
-
-export default Loading
+export default Loading;

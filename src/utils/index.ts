@@ -6,3 +6,7 @@ export function formatTime(date: Date): string {
   const formattedMinutes = minutes.toString().padStart(2, "0"); // Ensure 2-digit minutes
   return `${ampm} ${formattedHours}:${formattedMinutes}`;
 }
+
+export const waitForSeconds = (seconds: number) => {
+  return new Promise((resolve) => setTimeout(resolve, seconds * 1000));
+};

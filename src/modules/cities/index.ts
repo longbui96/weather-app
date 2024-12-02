@@ -1,19 +1,24 @@
 import { API_URL } from "../../constants/config";
-import { IWeather } from "../../components/WeatherCard";
 
-interface IWeatherRequest {
+export interface ICity {
+  id: number;
+  city: string;
+  country: string;
+}
+
+export interface ICityRequest {
   page?: number;
   pageSize?: number;
   search?: string;
 }
 
-const getWeatherData = async ({
+const getCityData = async ({
   page = 1,
   pageSize = 10,
   search,
-}: IWeatherRequest) => {
+}: ICityRequest) => {
   try {
-    const payload: Omit<IWeatherRequest, "page" | "pageSize"> = {};
+    const payload: Omit<ICityRequest, "page" | "pageSize"> = {};
     if (search) {
       payload.search = search;
     }
@@ -26,16 +31,21 @@ const getWeatherData = async ({
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    const data: IWeather[] = await response.json();
+    const data: ICity[] = await response.json();
 
     // // Need to simulate the pagination because this API do not have that feature
     const paginatedData = data.slice((page - 1) * pageSize, page * pageSize);
 
-    return paginatedData;
+    // Simulate another API for cities
+    return paginatedData.map(({ id, city, country }) => ({
+      id,
+      city,
+      country,
+    }));
   } catch (err) {
     alert(err instanceof Error ? err.message : "Unknown error");
     return [];
   }
 };
 
-export { getWeatherData };
+export { getCityData };

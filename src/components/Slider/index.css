@@ -1,0 +1,53 @@
+.Slider {
+  width: 100%;
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.Slider .SliderTitle {
+  text-wrap: nowrap;
+}
+
+.Slider .SliderContainer {
+  position: relative;
+  width: 100%;
+  height: 10px;
+  border-radius: 5px;
+  display: inline-block;
+}
+
+.Slider .SliderBar {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-color: #6e6e6e;
+  transform: translateY(-50%);
+}
+
+.Slider .SliderActiveBar {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background-color: #2292f9;
+  transform: translateY(-50%);
+}
+
+.Slider .SliderButton {
+  position: absolute;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+}
+
+.Slider .SliderValue {
+  width: 80px;
+}

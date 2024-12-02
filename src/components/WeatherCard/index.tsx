@@ -1,7 +1,7 @@
 import { HTMLAttributes } from "react";
 
 import { formatTime } from "../../utils";
-import { ReactComponent as IconXMarkCircle } from "../../assets/icons/iconmonstr-x-mark-circle-thin.svg";
+import { ReactComponent as IconXMarkCircle } from "../../assets/icons/x-mark-circle.svg";
 
 import Button from "../Button";
 
@@ -60,21 +60,17 @@ export interface IWeather {
   forecast: IForecast[];
 }
 
-export interface IExtraProps {
-  data: IWeather,
-  onClose?: () => {}
+export interface IWeatherCardProps {
+  data: IWeather;
+  onRemove?: () => void;
 }
 
 const WeatherCard = ({
   data,
-  onClose,
+  onRemove,
   className,
   ...props
-}: Partial<HTMLAttributes<HTMLDivElement>> & IExtraProps) => {
-  // const latestForecast = data.forecast.sort((a, b) => {
-  //   return new Date(b.date).getTime() - new Date(a.date).getTime();
-  // })[0];
-
+}: Partial<HTMLAttributes<HTMLDivElement>> & IWeatherCardProps) => {
   return (
     <div className={`WeatherCard ${className}`} {...props}>
       <div className="WeatherCard-City">
@@ -85,15 +81,17 @@ const WeatherCard = ({
       <div className="WeatherCard-Details">
         <div key={`${data.city}`}>
           <div>{formatTime(new Date())}</div>
-          <div>Wind speed: {data.wind_speed}km/h</div>
-          <div>
+          <div>Wind: {data.wind_speed} m/s</div>
+          {/* <div>
             Humidity: {data.humidity}g/m<sup>3</sup>
-          </div>
+          </div> */}
         </div>
       </div>
-      <Button className="WeatherCard-Closer noselect" onClick={onClose} icon={<IconXMarkCircle />}>
-        
-      </Button>
+      <Button
+        className="WeatherCard-Closer noselect"
+        onClick={onRemove}
+        icon={<IconXMarkCircle />}
+      />
     </div>
   );
 };

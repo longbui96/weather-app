@@ -1,0 +1,10 @@
+.InfiniteScroller {
+  overflow-y: scroll;
+  max-height: 500px;
+  min-height: 50px;
+}
+
+/* Hides the scrollbar */
+.InfiniteScroller::-webkit-scrollbar {
+  display: none;
+}

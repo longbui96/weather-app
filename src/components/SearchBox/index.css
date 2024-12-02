@@ -1,15 +1,58 @@
 .SearchBox {
-    width: 100%;
-    border: 1px solid rgb(190, 190, 190);
-    border-radius: 4px;
-    background-color: #ffffff;
-    padding: 8px 8px;
-    margin-bottom: 10px;
+  width: 100%;
+  border: 1px solid rgb(190, 190, 190);
+  border-radius: 4px;
+  background-color: #ffffff;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: start;
+  position: relative;
 }
 
-.SearchBox-Input {
+.SearchBox .SearchBox-Input {
   border: none;
   outline: none;
-  width: 100%;
   font-size: 20px;
+  margin: 8px;
+  width: calc(100% - 56px);
+}
+
+.SearchBox .SearchBox-Icon {
+  margin: auto;
+  cursor: pointer;
+}
+
+.SearchBox .SearchBox-Icon.ArrowDown {
+  transform: rotate(90deg);
+  -webkit-transform: rotate(90deg);
+}
+
+.SearchBox .SearchBox-Icon.ArrowUp {
+  transform: rotate(270deg);
+  -webkit-transform: rotate(270deg);
+}
+
+.SearchBox .SearchBox-Suggestions {
+  position: absolute;
+  top: 100%;
+  left: -1px;
+  z-index: 99;
+}
+
+.SearchBox .SearchBox-Suggestions .SearchBox-Suggestions-Items {
+  width: 300px;
+  text-align: left;
+  background-color: white;
+  border: 1px solid #a8a8a8;
+  height: 30px;
+  font-size: 18px;
+  font-weight: 600;
+  padding: 10px 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.SearchBox .SearchBox-Suggestions .SearchBox-Suggestions-Items:hover {
+  background-color: rgb(191, 225, 255);
 }
