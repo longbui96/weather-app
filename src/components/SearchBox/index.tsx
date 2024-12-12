@@ -19,6 +19,7 @@ export interface ISearchBoxProps {
   placeholder: string;
   onSearch: (input: string) => void;
   getSuggestions: (input: string) => Promise<ISuggestionItem[]>;
+  initValue?: string;
 }
 
 const SearchBox: React.FC<
@@ -28,6 +29,7 @@ const SearchBox: React.FC<
   onSearch,
   getSuggestions,
   className = "",
+  initValue = "",
   ...restProps
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -36,7 +38,12 @@ const SearchBox: React.FC<
   const [suggestions, setSuggestions] = useState<ISuggestionItem[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
 
-  // Hide suggestions when clicking outside the SearchBox
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.value = initValue;
+    }
+  }, [initValue]);
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -76,6 +83,7 @@ const SearchBox: React.FC<
         ref={inputRef}
         className="SearchBox-Input"
         placeholder={placeholder}
+        defaultValue={initValue}
         onKeyDown={(event) => {
           if (event.key === "Enter") {
             onSearch && onSearch(event.currentTarget.value);

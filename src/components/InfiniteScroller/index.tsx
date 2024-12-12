@@ -45,7 +45,7 @@ const InfiniteScroller = <T,>(props: Partial<IInfiniteScrollerProps<T>>) => {
     <div ref={scrollerRef} className="InfiniteScroller" {...restProps}>
       {dataSource?.map((item, index) => children && children(item, index))}
       {(!dataSource || dataSource.length === 0) && !isLoading && (
-        <span>No data found</span>
+        <span>No data found or your city not warmer than above</span>
       )}
       <Loading isLoading={isLoading} />
     </div>

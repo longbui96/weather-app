@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
-import { waitForSeconds } from "../../utils";
 import { getWeatherData } from "../../modules/weathers";
 import { getCityData } from "../../modules/cities";
 
@@ -54,28 +53,20 @@ function MainLayout() {
   const [data, setData] = useState<IWeather[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isLoading, setLoading] = useState<boolean>(false);
-  const [search, setSearch] = useState<string>();
+  const [search, setSearch] = useState<string>("London");
   const [warmerThan, setWarmerThan] = useState<number>(INIT_SLIDER_VALUE);
 
-  useEffect(() => {
-    getWeather();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search, warmerThan]);
-
-  const getWeather = async () => {
-    if (isLoading) return; // Prevent multiple requests while loading
+  const getWeather = useCallback(async () => {
+    if (isLoading) return;
 
     try {
       setLoading(true);
-      await waitForSeconds(0.2); // Simulate the network loading
 
       const payload: any = {
         page: currentPage,
         pageSize: 10,
+        search: search,
       };
-      if (search) {
-        payload.search = search;
-      }
 
       let newData: IWeather[] = await getWeatherData(payload);
 
@@ -84,16 +75,20 @@ function MainLayout() {
       }
 
       if (newData.length !== 0) {
-        setData([...data, ...newData]);
+        setData((prevData) => [...prevData, ...newData]);
         setCurrentPage(currentPage + 1);
       }
     } catch (error) {
-      console.log("Error when get weather data: ", error);
-      // alert("Having a issue when get weather data, please try again!")
+      console.log("Error when getting weather data: ", error);
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentPage, warmerThan, search, isLoading]);
+
+  useEffect(() => {
+    getWeather();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search, warmerThan]);
 
   const getSuggestions = async (searchValue: string) => {
     const cities = await getCityData({
@@ -119,11 +114,12 @@ function MainLayout() {
         <SearchBox
           className="mb-2"
           placeholder={"Search a city"}
+          initValue={search}
           onSearch={(input) => {
             refreshAll();
             setSearch(input);
           }}
-          getSuggestions={getSuggestions}
+          // getSuggestions={getSuggestions}
         />
         <Slider
           className={"mb-2"}
@@ -133,7 +129,6 @@ function MainLayout() {
           initialValue={INIT_SLIDER_VALUE}
           onChange={(value) => {
             refreshAll();
-            console.log(value);
             setWarmerThan(value);
           }}
           showValue={true}
@@ -150,7 +145,10 @@ function MainLayout() {
               className={"mb-2"}
               data={item}
               onRemove={() => {
-                setData([...data.slice(0, index), ...data.slice(index + 1)]);
+                setData((prevData) => [
+                  ...prevData.slice(0, index),
+                  ...prevData.slice(index + 1),
+                ]);
               }}
             />
           )}

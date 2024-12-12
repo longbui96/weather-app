@@ -1,4 +1,4 @@
-import { API_URL } from "../../constants/config";
+import openWeatherMap from "../../fetcher/intances/open-weather-map";
 
 export interface ICity {
   id: number;
@@ -10,6 +10,7 @@ export interface ICityRequest {
   page?: number;
   pageSize?: number;
   search?: string;
+  appid?: string;
 }
 
 const getCityData = async ({
@@ -18,32 +19,21 @@ const getCityData = async ({
   search,
 }: ICityRequest) => {
   try {
-    const payload: Omit<ICityRequest, "page" | "pageSize"> = {};
+    const payload: { q?: string } = {};
     if (search) {
-      payload.search = search;
+      payload.q = search;
     }
 
-    const requestURL = new URLSearchParams(payload);
-    const response = await fetch(
-      `${API_URL}/api/v1/weathers?${requestURL.toString()}`
-    );
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data: ICity[] = await response.json();
-
-    // // Need to simulate the pagination because this API do not have that feature
-    const paginatedData = data.slice((page - 1) * pageSize, page * pageSize);
+    const data: any[] = await openWeatherMap.get("/geo/1.0/direct", payload);
 
     // Simulate another API for cities
-    return paginatedData.map(({ id, city, country }) => ({
+    return data.map(({ id, city, country }) => ({
       id,
       city,
       country,
     }));
   } catch (err) {
-    alert(err instanceof Error ? err.message : "Unknown error");
+    // alert(err instanceof Error ? err.message : "Unknown error");
     return [];
   }
 };

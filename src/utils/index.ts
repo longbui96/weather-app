@@ -10,3 +10,7 @@ export function formatTime(date: Date): string {
 export const waitForSeconds = (seconds: number) => {
   return new Promise((resolve) => setTimeout(resolve, seconds * 1000));
 };
+
+export const kelvinToCelsius = (kelvin: number): number => {
+  return kelvin - 273.15;
+};
